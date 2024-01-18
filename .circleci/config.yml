@@ -1,0 +1,85 @@
+version: 2.1
+
+# executors and orbs
+executors:
+  busybox:
+    docker:
+      - image: busybox:latest
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
+  node:
+    docker:
+      - image: node:20.5.1-slim
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
+
+orbs:
+  docker: circleci/docker@2.2.0
+
+# workflows and jobs
+workflows:
+  version: 2
+  default:
+    jobs:
+      - checkpoint-prepare
+      - checkpoint-package
+      - checkpoint-verify
+
+jobs:
+  checkpoint-prepare:
+    executor:
+      name: busybox
+    steps:
+      - run:
+          name: ckeckpoint of prepare stage
+          command: echo 'passed ckeckpoint of prepare stage'
+  checkpoint-package:
+    executor:
+      name: busybox
+    steps:
+      - run:
+          name: ckeckpoint of package stage
+          command: echo 'passed ckeckpoint of package stage'
+  checkpoint-verify:
+    executor:
+      name: busybox
+    steps:
+      - run:
+          name: ckeckpoint of verify stage
+          command: echo 'passed ckeckpoint of verify stage'
+
+# commands
+commands:
+  command-npm_install:
+    parameters:
+      option:
+        type: string
+        default: ""
+      context:
+        type: string
+    steps:
+      - run:
+          name: export environment variables
+          command: |
+            echo 'export NPM_PREFIX="${CIRCLE_WORKING_DIRECTORY}/<< parameters.context >>"' >> $BASH_ENV
+      - run:
+          name: npm install
+          command: |
+            npm --prefix ${NPM_PREFIX} install << parameters.option >>
+  command-npm_run_script:
+    parameters:
+      task:
+        type: string
+      context:
+        type: string
+    steps:
+      - run:
+          name: export environment variables
+          command: |
+            echo 'export NPM_PREFIX="${CIRCLE_WORKING_DIRECTORY}/<< parameters.context >>"' >> $BASH_ENV
+      - run:
+          name: npm run-script
+          command: |
+            npm --prefix ${NPM_PREFIX} run-script << parameters.task >>
