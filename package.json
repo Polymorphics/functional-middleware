@@ -1,0 +1,16 @@
+{
+  "name": "functional-middleware",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Functional programing oriented middleware framework.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "functional",
+    "middleware",
+    "framework"
+  ],
+  "author": "HORI, Daisuke",
+  "license": "MIT"
+}
