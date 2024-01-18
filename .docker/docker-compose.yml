@@ -1,0 +1,41 @@
+version: "3.4"
+
+services:
+  circleci:
+    image: circleci/circleci-cli:latest
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    working_dir: /workspace
+    volumes:
+      - ../:/workspace
+    command: []
+    entrypoint: ["circleci"]
+
+  npm:
+    image: node:20.5.1-alpine3.18
+    user: node
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    volumes:
+      - ../:/workspace
+      - ./.npmrc:/home/node/.npmrc
+      - data_npm_cache:/home/node
+      - data_npm_local:/usr/local
+    working_dir: /workspace
+
+  npm-root:
+    image: node:20.5.1-alpine3.18
+    user: root
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    volumes:
+      - ../:/workspace
+      - data_npm_local:/usr/local
+    working_dir: /workspace
+
+volumes:
+  data_npm_cache:
+  data_npm_local:

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+export COMPOSE_PROJECT_NAME="$(basename $(dirname $(dirname $(realpath $0))))"
+export COMPOSE_FILE="$(dirname $0)/docker-compose.yml"
+
+docker-compose run --rm circleci "$@"
+exit $?

@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+export COMPOSE_PROJECT_NAME="$(basename $(dirname $(dirname $(realpath $0))))"
+export COMPOSE_FILE="$(dirname $0)/docker-compose.yml"
+
+case ${1} in
+  i|install)
+    case ${2} in
+      -g|--global)
+        docker-compose run --rm npm-root /usr/local/bin/npm "$@"
+        exit $?
+        ;;
+    esac
+    ;;
+esac
+
+docker-compose run -u "$(id -u):$(id -g)" --rm npm /usr/local/bin/npm "$@"
+exit $?
