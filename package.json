@@ -7,7 +7,8 @@
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --detectOpenHandles --forceExit",
+    "test-coverage": "jest --detectOpenHandles --forceExit --coverage"
   },
   "keywords": [
     "functional",
