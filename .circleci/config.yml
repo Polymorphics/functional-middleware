@@ -23,32 +23,89 @@ workflows:
   version: 2
   default:
     jobs:
-      - checkpoint-prepare
-      - checkpoint-package
-      - checkpoint-verify
+      - npm_install
+      - npm_build:
+          requires:
+            - npm_install
+      - npm_lint:
+          requires:
+            - npm_build
+      - npm_test:
+          requires:
+            - npm_build
+      - checkpoint:
+          requires:
+            - npm_lint
+            - npm_test
 
 jobs:
-  checkpoint-prepare:
+  checkpoint:
     executor:
       name: busybox
     steps:
       - run:
-          name: ckeckpoint of prepare stage
-          command: echo 'passed ckeckpoint of prepare stage'
-  checkpoint-package:
+          name: ckeckpoint
+          command: echo 'passed checkpoint'
+  npm_install:
     executor:
-      name: busybox
+      name: node
     steps:
-      - run:
-          name: ckeckpoint of package stage
-          command: echo 'passed ckeckpoint of package stage'
-  checkpoint-verify:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - restore_cache:
+          keys:
+            - npm_install-v1-{{ checksum "~/project/package.json" }}
+            - npm_install-v1
+      - command-npm_install:
+          context: .
+      - save_cache:
+          key: npm_install-v1-{{ checksum "~/project/package.json" }}
+          paths:
+            - ~/.npm
+            - ~/project/node_modules
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - node_modules
+  npm_build:
     executor:
-      name: busybox
+      name: node
     steps:
-      - run:
-          name: ckeckpoint of verify stage
-          command: echo 'passed ckeckpoint of verify stage'
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - command-npm_run_script:
+          task: build:ci
+          context: .
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .dist
+            - .types
+  npm_lint:
+    executor:
+      name: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - command-npm_run_script:
+          task: lint
+          context: .
+  npm_test:
+    executor:
+      name: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - command-npm_run_script:
+          task: test-coverage
+          context: .
+      - store_artifacts:
+          path: ~/project/coverage/lcov-report
+          destination: coverage
 
 # commands
 commands:
