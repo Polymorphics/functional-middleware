@@ -41,3 +41,5 @@ package-lock.json
 # general log file
 *.log
 coverage/*
+.dist/*
+.types/*
