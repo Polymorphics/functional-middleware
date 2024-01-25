@@ -37,6 +37,9 @@ workflows:
           requires:
             - npm_lint
             - npm_test
+          filters:
+            branches:
+              only: main
       - npm_diff:
           requires:
             - checkpoint
