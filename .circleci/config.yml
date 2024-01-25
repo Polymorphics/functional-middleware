@@ -37,6 +37,9 @@ workflows:
           requires:
             - npm_lint
             - npm_test
+      - npm_diff:
+          requires:
+            - checkpoint
 
 jobs:
   checkpoint:
@@ -106,6 +109,16 @@ jobs:
       - store_artifacts:
           path: ~/project/coverage/lcov-report
           destination: coverage
+  npm_diff:
+    executor:
+      name: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - command-npm_run_script:
+          task: build:diff
+          context: .
 
 # commands
 commands:
