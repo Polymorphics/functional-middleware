@@ -5,6 +5,7 @@
   "description": "Functional programing oriented middleware framework.",
   "scripts": {
     "build": "tsc",
+    "build:ci": "tsc --project .circleci/tsconfig.json",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
     "test": "jest --detectOpenHandles --forceExit",
