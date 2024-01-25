@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build:ci": "tsc --project .circleci/tsconfig.json",
+    "build:diff": "diff -rq  dist .dist && diff -rq types .types",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
     "test": "jest --detectOpenHandles --forceExit",
