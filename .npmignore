@@ -45,3 +45,18 @@ coverage/*
 # builds by ci
 .dist/*
 .types/*
+
+# Ignore for npm publish #
+##########################
+# git files
+.git/*
+.gitattributes
+.gitignore
+# development assets
+.circleci/*
+.docker/*
+src/*
+test/*
+.eslintrc.json
+jest.config.json
+tsconfig.json
