@@ -40,6 +40,8 @@ package-lock.json
 ##########################
 # general log file
 *.log
+# coverage report
 coverage/*
+# builds by ci
 .dist/*
 .types/*
