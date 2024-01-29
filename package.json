@@ -19,6 +19,8 @@
   ],
   "author": "HORI, Daisuke",
   "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./types/index.d.ts",
   "devDependencies": {
     "@types/jest": "^29.5.11",
     "@types/node": "^20.5.1",
