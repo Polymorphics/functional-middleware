@@ -6,39 +6,35 @@ import {
   MiddlewareInitializer,
 } from "../src";
 
-const mockMiddleware = {
+const mockMiddlewareA = {
   initializer: jest.fn(),
   handler: jest.fn(),
   finalizer: jest.fn(),
 };
 
-const mockPrototypeMiddleware = Object.assign(Object.create({
+const mockMiddlewareB = {
   initializer: jest.fn(),
   handler: jest.fn(),
   finalizer: jest.fn(),
-}), {
-  initializer: undefined,
-  handler: undefined,
-  finalizer: undefined,
-});
+};
 
 beforeEach(() => {
-  mockMiddleware.initializer.mockClear();
-  mockMiddleware.handler.mockClear();
-  mockMiddleware.finalizer.mockClear();
-  Object.getPrototypeOf(mockPrototypeMiddleware).initializer.mockClear();
-  Object.getPrototypeOf(mockPrototypeMiddleware).handler.mockClear();
-  Object.getPrototypeOf(mockPrototypeMiddleware).finalizer.mockClear();
+  mockMiddlewareA.initializer.mockClear();
+  mockMiddlewareA.handler.mockClear();
+  mockMiddlewareA.finalizer.mockClear();
+  mockMiddlewareB.initializer.mockClear();
+  mockMiddlewareB.handler.mockClear();
+  mockMiddlewareB.finalizer.mockClear();
 });
 
 const middlewareStack = createMiddlewareStack();
 
 test("add middleware to default stack", () => {
-  expect(middlewareStack.add(mockMiddleware)).toEqual(1);
+  expect(middlewareStack.add(mockMiddlewareA)).toEqual(1);
 });
 
 test("add prototype middleware to default stack", () => {
-  expect(middlewareStack.add(mockPrototypeMiddleware)).toEqual(2);
+  expect(middlewareStack.add(mockMiddlewareB)).toEqual(2);
 });
 
 test("get middleware list from stack", () => {
@@ -81,7 +77,7 @@ const customMiddlewareStack = createMiddlewareStack({
 });
 
 test("add middleware to primary stack", () => {
-  expect(customMiddlewareStack.add(mockMiddleware, "primary")).toEqual(1);
+  expect(customMiddlewareStack.add(mockMiddlewareA, "primary")).toEqual(1);
 });
 
 test("get middleware list from primary stack", () => {
@@ -105,7 +101,7 @@ test("get finalizer list from primary stack", () => {
 });
 
 test("add middleware to secondary stack", () => {
-  expect(customMiddlewareStack.add(mockMiddleware, "secondary")).toEqual(1);
+  expect(customMiddlewareStack.add(mockMiddlewareA, "secondary")).toEqual(1);
 });
 
 test("get middleware list from secondary stack", () => {
@@ -129,7 +125,7 @@ test("get finalizer list from secondary stack", () => {
 });
 
 test("can not add middleware to default stack", () => {
-  expect(customMiddlewareStack.add(mockMiddleware)).toBeUndefined();
+  expect(customMiddlewareStack.add(mockMiddlewareA)).toBeUndefined();
 });
 
 test("get empty middleware list from default stack", () => {
