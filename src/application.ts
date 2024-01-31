@@ -25,7 +25,11 @@ export const createApplication = (application?: {
   ready?: (option?: () => any) => void;
   process?: (option?: () => any) => void;
   close?: (option?: () => any) => void;
-  caller?: (chain: ApplicationCallerChain) => void;
+  initialize?: (
+    chain: ApplicationCallerChain<MiddlewareInitializer<any>>,
+  ) => void;
+  handle?: (chain: ApplicationCallerChain<MiddlewareHandler<any, any>>) => void;
+  finalize?: (chain: ApplicationCallerChain<MiddlewareFinalizer<any>>) => void;
 }): Application<
   Middleware<
     MiddlewareInitializer<any>,
@@ -37,12 +41,16 @@ export const createApplication = (application?: {
   any
 > => {
   const stack = application?.stack ?? createMiddlewareStack();
-  const caller = application?.caller ?? createApplicationCaller();
+  const initialize = application?.initialize ?? createApplicationCaller();
+  const handle = application?.handle ?? createApplicationCaller();
+  const finalize = application?.finalize ?? createApplicationCaller();
 
   return Object.assign(
     {
       stack,
-      caller,
+      initialize,
+      handle,
+      finalize,
       use: (
         middleware: Middleware<
           MiddlewareInitializer<any>,
@@ -50,23 +58,23 @@ export const createApplication = (application?: {
           MiddlewareFinalizer<any>
         >,
       ) => stack.add(middleware),
-      ready: () => caller(stack.initializer().reverse()),
-      process: () => caller(stack.handler().reverse()),
-      close: () => caller(stack.finalizer().reverse()),
+      ready: () => initialize(stack.initializer().reverse()),
+      process: () => handle(stack.handler().reverse()),
+      close: () => finalize(stack.finalizer().reverse()),
     },
     application,
   );
 };
 
 export const createApplicationCaller = (
-  caller: (chain: ApplicationCallerChain) => void = (chain) => {
+  caller: (chain: ApplicationCallerChain<any>) => void = (chain) => {
     const next = () => {
       const func = chain.pop();
       func && func(next);
     };
     next();
   },
-): ((chain: ApplicationCallerChain) => void) => caller;
+): ((chain: ApplicationCallerChain<any>) => void) => caller;
 
 export interface Application<
   M extends Middleware<
@@ -83,12 +91,11 @@ export interface Application<
   ready: (option?: () => ReadyOption) => void;
   process: (option?: () => ProcessOption) => void;
   close: (option?: () => CloseOption) => void;
-  caller: (chain: ApplicationCallerChain) => void;
+  initialize: (
+    chain: ApplicationCallerChain<MiddlewareInitializer<any>>,
+  ) => void;
+  handle: (chain: ApplicationCallerChain<MiddlewareHandler<any, any>>) => void;
+  finalize: (chain: ApplicationCallerChain<MiddlewareFinalizer<any>>) => void;
 }
 
-export interface ApplicationCallerChain
-  extends Array<
-    | MiddlewareInitializer<any>
-    | MiddlewareHandler<any, any>
-    | MiddlewareFinalizer<any>
-  > {}
+export interface ApplicationCallerChain<T> extends Array<T> {}

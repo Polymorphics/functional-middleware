@@ -51,7 +51,6 @@ test("close to middleware in application", () => {
   expect(mockFinalizer.mock.calls.length).toEqual(1);
 });
 
-const caller = createApplicationCaller();
 const stack = createMiddlewareStack({
   primary:
     Array<
@@ -84,9 +83,15 @@ Object.assign(stack, {
   finalizer: () => Object.getPrototypeOf(stack).finalizer("primary"),
 });
 
+const initialize = createApplicationCaller();
+const handle = createApplicationCaller();
+const finalize = createApplicationCaller();
+
 const customApplication = createApplication({
-  caller,
   stack,
+  initialize,
+  handle,
+  finalize,
 });
 
 test("add middleware to primary stack", () => {
