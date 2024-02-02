@@ -1,8 +1,4 @@
-export declare const createMiddleware: (middleware?: {
-    initializer?: MiddlewareInitializer<any>;
-    handler: MiddlewareHandler<any, any>;
-    finalizer?: MiddlewareFinalizer<any>;
-}) => Middleware<MiddlewareInitializer<any>, MiddlewareHandler<any, any>, MiddlewareFinalizer<any>>;
+export declare const createMiddleware: (middleware?: Partial<Middleware<MiddlewareInitializer<any>, MiddlewareHandler<any, any>, MiddlewareFinalizer<any>>>) => Middleware<MiddlewareInitializer<any>, MiddlewareHandler<any, any>, MiddlewareFinalizer<any>>;
 export interface Middleware<I extends MiddlewareInitializer<any>, H extends MiddlewareHandler<any, any>, F extends MiddlewareFinalizer<any>> {
     initializer: I;
     handler: H;
