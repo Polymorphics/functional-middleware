@@ -7,30 +7,20 @@ import {
 } from "./middleware";
 import { createMiddlewareStack, MiddlewareStack } from "./middleware-stack";
 
-export const createApplication = (application?: {
-  stack?: MiddlewareStack<
-    Middleware<
-      MiddlewareInitializer<any>,
-      MiddlewareHandler<any, any>,
-      MiddlewareFinalizer<any>
+export const createApplication = (
+  application?: Partial<
+    Application<
+      Middleware<
+        MiddlewareInitializer<any>,
+        MiddlewareHandler<any, any>,
+        MiddlewareFinalizer<any>
+      >,
+      any,
+      any,
+      any
     >
-  >;
-  use?: (
-    middleware: Middleware<
-      MiddlewareInitializer<any>,
-      MiddlewareHandler<any, any>,
-      MiddlewareFinalizer<any>
-    >,
-  ) => void;
-  ready?: (option?: () => any) => void;
-  process?: (option?: () => any) => void;
-  close?: (option?: () => any) => void;
-  initialize?: (
-    chain: ApplicationCallerChain<MiddlewareInitializer<any>>,
-  ) => void;
-  handle?: (chain: ApplicationCallerChain<MiddlewareHandler<any, any>>) => void;
-  finalize?: (chain: ApplicationCallerChain<MiddlewareFinalizer<any>>) => void;
-}): Application<
+  >,
+): Application<
   Middleware<
     MiddlewareInitializer<any>,
     MiddlewareHandler<any, any>,

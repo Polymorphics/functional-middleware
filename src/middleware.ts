@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const createMiddleware = (middleware?: {
-  initializer?: MiddlewareInitializer<any>;
-  handler: MiddlewareHandler<any, any>;
-  finalizer?: MiddlewareFinalizer<any>;
-}): Middleware<
+export const createMiddleware = (
+  middleware?: Partial<
+    Middleware<
+      MiddlewareInitializer<any>,
+      MiddlewareHandler<any, any>,
+      MiddlewareFinalizer<any>
+    >
+  >,
+): Middleware<
   MiddlewareInitializer<any>,
   MiddlewareHandler<any, any>,
   MiddlewareFinalizer<any>
