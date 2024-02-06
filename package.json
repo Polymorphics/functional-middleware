@@ -21,6 +21,14 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Polymorphics/functional-middleware.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Polymorphics/functional-middleware/issues"
+  },
+  "homepage": "https://github.com/Polymorphics/functional-middleware#readme",
   "devDependencies": {
     "@types/jest": "^29.5.11",
     "@types/node": "^20.5.1",
