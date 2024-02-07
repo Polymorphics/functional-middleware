@@ -14,9 +14,24 @@ executors:
         auth:
           username: $DOCKER_LOGIN
           password: $DOCKER_PASSWORD
-
-orbs:
-  docker: circleci/docker@2.2.0
+  node18:
+    docker:
+      - image: node:18.19.0-slim
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
+  node20:
+    docker:
+      - image: node:20.11.0-slim
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
+  node21:
+    docker:
+      - image: node:21.6.1-slim
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
 
 # workflows and jobs
 workflows:
@@ -40,6 +55,15 @@ workflows:
           filters:
             branches:
               only: main
+      - npm_test_node18:
+          requires:
+            - checkpoint
+      - npm_test_node20:
+          requires:
+            - checkpoint
+      - npm_test_node21:
+          requires:
+            - checkpoint
       - npm_diff:
           requires:
             - checkpoint
@@ -121,6 +145,36 @@ jobs:
           at: ~/project
       - command-npm_run_script:
           task: build:diff
+          context: .
+  npm_test_node18:
+    executor:
+      name: node18
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - command-npm_run_script:
+          task: test
+          context: .
+  npm_test_node20:
+    executor:
+      name: node20
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - command-npm_run_script:
+          task: test
+          context: .
+  npm_test_node21:
+    executor:
+      name: node21
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - command-npm_run_script:
+          task: test
           context: .
 
 # commands
