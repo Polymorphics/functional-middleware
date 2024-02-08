@@ -50,6 +50,7 @@ coverage/*
 ##########################
 # git files
 .git/*
+.github/*
 .gitattributes
 .gitignore
 # development assets
