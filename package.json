@@ -1,6 +1,5 @@
 {
   "name": "functional-middleware",
-  "private": true,
   "version": "0.1.0",
   "description": "Functional programing oriented middleware framework.",
   "scripts": {
