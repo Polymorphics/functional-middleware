@@ -41,6 +41,31 @@ export const createMiddlewareStack = (
       >,
       entry = "default",
     ) => stack[entry]?.push(middleware),
+    remove: (
+      middleware: Middleware<
+        MiddlewareInitializer<any>,
+        MiddlewareHandler<any, any>,
+        MiddlewareFinalizer<any>
+      >,
+      entry = "default",
+    ) => {
+      const origin = stack[entry]?.length || 0;
+      if (origin) {
+        stack[entry] = stack[entry].filter(
+          (something) => !Object.is(something, middleware),
+        );
+      }
+
+      return origin - (stack[entry]?.length || 0);
+    },
+    clear: (entry = "default") => {
+      const origin = stack[entry]?.length || 0;
+      if (origin) {
+        stack[entry] = stack[entry].slice(stack[entry].length);
+      }
+
+      return origin;
+    },
     middleware: (entry = "default") =>
       stack[entry]?.map((middleware) => middleware) || [],
     initializer: (entry = "default") =>
@@ -59,6 +84,8 @@ export interface MiddlewareStack<
   >,
 > {
   add: (middleware: M, entry?: string) => number;
+  remove: (middleware: M, entry?: string) => number;
+  clear: (entry?: string) => number;
   middleware: (entry?: string) => Array<M>;
   initializer: (entry?: string) => Array<MiddlewareInitializer<any>>;
   handler: (entry?: string) => Array<MiddlewareHandler<any, any>>;

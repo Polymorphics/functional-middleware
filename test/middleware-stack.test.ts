@@ -57,6 +57,37 @@ test("get finalizer list from stack", () => {
   expect(finalizerList).toHaveLength(2);
 });
 
+test("remove middleware from stack", () => {
+  const result = middlewareStack.remove(mockMiddlewareA);
+  expect(result).toEqual(1);
+  const middlewareList = middlewareStack.middleware();
+  expect(middlewareList).toHaveLength(1);
+});
+
+test("retry remove same middleware from stack", () => {
+  const result = middlewareStack.remove(mockMiddlewareA);
+  expect(result).toEqual(0);
+  const middlewareList = middlewareStack.middleware();
+  expect(middlewareList).toHaveLength(1);
+});
+
+test("clear middleware stack", () => {
+  const result = middlewareStack.clear();
+  expect(result).toEqual(1);
+  const middlewareList = middlewareStack.middleware();
+  expect(middlewareList).toHaveLength(0);
+});
+
+test("remove middleware from invalid stack", () => {
+  const result = middlewareStack.remove(mockMiddlewareA, "invalid");
+  expect(result).toEqual(0);
+});
+
+test("clear invalid middleware stack", () => {
+  const result = middlewareStack.clear("invalid");
+  expect(result).toEqual(0);
+});
+
 const customMiddlewareStack = createMiddlewareStack({
   primary:
     Array<
