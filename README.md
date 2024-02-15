@@ -508,6 +508,8 @@ const multipleMiddlewareStack = createMiddlewareStack({
 // overwrite accessors
 Object.assign(multipleMiddlewareStack, {
     add: (middleware) => Object.getPrototypeOf(multipleMiddlewareStack).add(middleware, "primary"),
+    remove: (middleware) => Object.getPrototypeOf(multipleMiddlewareStack).remove(middleware, "primary"),
+    clear: () => Object.getPrototypeOf(multipleMiddlewareStack).clear("primary"),
     middleware: () => Object.getPrototypeOf(multipleMiddlewareStack).middleware("primary"),
     initializer: () => Object.getPrototypeOf(multipleMiddlewareStack).initializer("primary"),
     handler: () => Object.getPrototypeOf(multipleMiddlewareStack).handler("primary"),
@@ -549,6 +551,14 @@ Object.assign(multipleMiddlewareStack, {
             MiddlewareFinalizer<any>
         >
     ) => Object.getPrototypeOf(multipleMiddlewareStack).add(middleware, "primary"),
+    remove: (
+        middleware: Middleware<
+            MiddlewareInitializer<any>,
+            MiddlewareHandler<any, any>,
+            MiddlewareFinalizer<any>
+        >
+    ) => Object.getPrototypeOf(multipleMiddlewareStack).remove(middleware, "primary"),
+    clear: () => Object.getPrototypeOf(multipleMiddlewareStack).clear("primary"),
     middleware: () => Object.getPrototypeOf(multipleMiddlewareStack).middleware("primary"),
     initializer: () => Object.getPrototypeOf(multipleMiddlewareStack).initializer("primary"),
     handler: () => Object.getPrototypeOf(multipleMiddlewareStack).handler("primary"),
